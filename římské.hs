@@ -15,3 +15,14 @@ zřímských [h, h1] = if hodnota h < hodnota h1 then (hodnota h1 - hodnota h) e
 zřímských (h : h1 : h2 : t) = if hodnota h == hodnota h1 then (hodnota h2 - (hodnota h + hodnota h1)) + zřímských t
                                 else if hodnota h < hodnota h1 then (hodnota h1 - hodnota h) + zřímských (h2 : t)
                                 else (hodnota h) + zřímských (h1 : h2 : t) 
+
+
+ověř :: Eq a => [(String, a, a)] -> [(String, a, a)]
+ověř [] = []
+ověř ((a, b ,c):t) = if b == c then ověř t 
+                else (a,b,c) : ověř t    
+
+test = ověř [
+    ("10", zřímských "X", 10),
+    ("1984", zřímských "MCMLXXXIV", 1984)
+    ]
