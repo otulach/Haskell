@@ -8,6 +8,14 @@ hodnota 'D' = 500
 hodnota 'M' = 1000
 hodnota _ = 0
 
+hodnota2 1 = 'I'
+hodnota2 5 = 'V'
+hodnota2 10 = 'X'
+hodnota2 50 = 'L'
+hodnota2 100 = 'C'
+hodnota2 500 = 'D'
+hodnota2 1000 = 'M'
+
 zřímských :: String -> Int
 zřímských "" = 0
 zřímských [h] = hodnota h
@@ -25,5 +33,28 @@ ověř ((a, b ,c):t) = if b == c then ověř t
 
 test = ověř [
     ("10", zřímských "X", 10),
-    ("1984", zřímských "MCMLXXXIV", 1984)
+    ("1984", zřímských "MCMLXXXIV", 1984),
+    ("13", zřímských $ narimske 13, 13),
+    ("osum", zřímských $ narimske 8, 8)
     ]
+
+
+narimske 0 = []
+narimske a = if a >= 1000 then hodnota2 1000 : narimske (a - 1000) else
+                if a >= 900 then hodnota2 100 : hodnota2 1000 : narimske (a - 900) else
+                if a >= 800 then hodnota2 100 : hodnota2 100 : hodnota2 1000 : narimske (a - 800) else    
+            if a >= 500 then hodnota2 500 : narimske (a - 500) else
+                if a >= 450 then hodnota2 50 : hodnota2 500 : narimske (a - 450) else
+                if a >= 400 then hodnota2 100 : hodnota2 500 : narimske (a - 400) else
+            if a >= 100 then hodnota2 100 : narimske (a - 100) else
+                if a >= 90 then hodnota2 10 : hodnota2 100 :  narimske (a - 90) else
+                if a >= 80 then hodnota2 10 : hodnota2 10 : hodnota2 100 : narimske (a - 80) else
+            if a >= 50 then hodnota2 50 : narimske (a - 50) else
+                if a >= 45 then hodnota2 5 : hodnota2 50 :  narimske (a - 45) else
+                if a >= 40 then hodnota2 10 : hodnota2 50 : narimske (a - 40) else
+            if a >= 10 then hodnota2 10 : narimske (a - 10) else
+                if a >= 9 then hodnota2 1 : hodnota2 10 :  narimske (a - 9) else
+                if a >= 8 then hodnota2 1 : hodnota2 1 : hodnota2 10 : narimske (a - 8) else
+            if a >= 5 then hodnota2 5 : narimske (a - 5) else
+                if a >= 4 then hodnota2 1 : hodnota2 5 :  narimske (a - 4) else
+            hodnota2 1 : narimske (a - 1)
