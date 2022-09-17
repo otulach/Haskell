@@ -42,10 +42,18 @@ test = ověř [
     TestCase "1984" (zřímských "MCMLXXXIV") 1984,
     TestCase "13" (narimske 13) "XIII",
     TestCase "8" (narimske 8) "VIII",
+    TestCase "999" (narimske 999) "CMXCIX",
     TestCase "end of tests" "ok" "ok"
     ]
 
+testoba = ověř $ map testuj [1..3000] where
+    testuj :: Int -> Testable
+    testuj x = TestCase "" x a where
+        r = narimske x
+        a :: Int
+        a = zřímských r
 
+narimske :: Int -> String
 narimske 0 = []
 narimske a = if a >= 1000 then hodnota2 1000 : narimske (a - 1000) else
                 if a >= 900 then hodnota2 100 : hodnota2 1000 : narimske (a - 900) else
