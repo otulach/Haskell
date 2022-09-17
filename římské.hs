@@ -1,3 +1,5 @@
+{-# LANGUAGE ExistentialQuantification #-}
+
 hodnota :: Char -> Int
 hodnota 'I' = 1
 hodnota 'V' = 5
@@ -25,17 +27,22 @@ zřímských (h : h1 : h2 : t) = if hodnota h == hodnota h1 && hodnota h2 > hodn
                                 else if hodnota h < hodnota h1 then (hodnota h1 - hodnota h) + zřímských (h2 : t)
                                 else (hodnota h) + zřímských (h1 : h2 : t) 
 
+data Testable = forall a . (Eq a, Show a) => TestCase String a a
+instance Show Testable
+  where
+  showsPrec p (TestCase a b c) = showsPrec p (a, b, c)
 
-ověř :: Eq a => [(String, a, a)] -> [(String, a, a)]
+ověř :: [Testable] -> [Testable]
 ověř [] = []
-ověř ((a, b ,c):t) = if b == c then ověř t 
-                else (a,b,c) : ověř t    
+ověř (TestCase a b c:t) = if b == c then ověř t 
+                else TestCase a b c : ověř t    
 
 test = ověř [
-    ("10", zřímských "X", 10),
-    ("1984", zřímských "MCMLXXXIV", 1984),
-    ("13", zřímských $ narimske 13, 13),
-    ("osum", zřímských $ narimske 8, 8)
+    TestCase "10" (zřímských "X") 10,
+    TestCase "1984" (zřímských "MCMLXXXIV") 1984,
+    TestCase "13" (narimske 13) "XIII",
+    TestCase "8" (narimske 8) "VIII",
+    TestCase "end of tests" "ok" "ok"
     ]
 
 
@@ -54,7 +61,6 @@ narimske a = if a >= 1000 then hodnota2 1000 : narimske (a - 1000) else
                 if a >= 40 then hodnota2 10 : hodnota2 50 : narimske (a - 40) else
             if a >= 10 then hodnota2 10 : narimske (a - 10) else
                 if a >= 9 then hodnota2 1 : hodnota2 10 :  narimske (a - 9) else
-                if a >= 8 then hodnota2 1 : hodnota2 1 : hodnota2 10 : narimske (a - 8) else
             if a >= 5 then hodnota2 5 : narimske (a - 5) else
                 if a >= 4 then hodnota2 1 : hodnota2 5 :  narimske (a - 4) else
             hodnota2 1 : narimske (a - 1)
