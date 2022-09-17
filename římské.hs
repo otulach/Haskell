@@ -1,3 +1,5 @@
+{-# LANGUAGE ExistentialQuantification #-}
+
 hodnota :: Char -> Int
 hodnota 'I' = 1
 hodnota 'V' = 5
@@ -16,13 +18,18 @@ zřímských (h : h1 : h2 : t) = if hodnota h == hodnota h1 then (hodnota h2 - (
                                 else if hodnota h < hodnota h1 then (hodnota h1 - hodnota h) + zřímských (h2 : t)
                                 else (hodnota h) + zřímských (h1 : h2 : t) 
 
+data Testable = forall a . (Eq a, Show a) => TestCase String a a
+instance Show Testable
+  where
+  showsPrec p (TestCase a b c) = showsPrec p (a, b, c)
 
-ověř :: Eq a => [(String, a, a)] -> [(String, a, a)]
+ověř :: [Testable] -> [Testable]
 ověř [] = []
-ověř ((a, b ,c):t) = if b == c then ověř t 
-                else (a,b,c) : ověř t    
+ověř (TestCase a b c:t) = if b == c then ověř t 
+                else TestCase a b c : ověř t    
 
 test = ověř [
-    ("10", zřímských "X", 10),
-    ("1984", zřímských "MCMLXXXIV", 1984)
+    TestCase "10" (zřímských "X") 10,
+    TestCase "1984" (zřímských "MCMLXXXIV") 1984,
+    TestCase "end of tests" "ok" "ok"
     ]
