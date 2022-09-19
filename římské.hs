@@ -40,35 +40,35 @@ ověř (TestCase a b c:t) = if b == c then ověř t
 test = ověř [
     TestCase "10" (zřímských "X") 10,
     TestCase "1984" (zřímských "MCMLXXXIV") 1984,
-    TestCase "13" (narimske 13) "XIII",
-    TestCase "8" (narimske 8) "VIII",
-    TestCase "999" (narimske 999) "CMXCIX",
+    TestCase "13" (nařímské 13) "XIII",
+    TestCase "8" (nařímské 8) "VIII",
+    TestCase "999" (nařímské 999) "CMXCIX",
     TestCase "end of tests" "ok" "ok"
     ]
 
 testoba = ověř $ map testuj [1..3000] where
     testuj :: Int -> Testable
     testuj x = TestCase "" x a where
-        r = narimske x
+        r = nařímské x
         a :: Int
         a = zřímských r
 
-narimske :: Int -> String
-narimske 0 = []
-narimske a = if a >= 1000 then hodnota2 1000 : narimske (a - 1000) else
-                if a >= 900 then hodnota2 100 : hodnota2 1000 : narimske (a - 900) else
-                if a >= 800 then hodnota2 100 : hodnota2 100 : hodnota2 1000 : narimske (a - 800) else    
-            if a >= 500 then hodnota2 500 : narimske (a - 500) else
-                if a >= 450 then hodnota2 50 : hodnota2 500 : narimske (a - 450) else
-                if a >= 400 then hodnota2 100 : hodnota2 500 : narimske (a - 400) else
-            if a >= 100 then hodnota2 100 : narimske (a - 100) else
-                if a >= 90 then hodnota2 10 : hodnota2 100 :  narimske (a - 90) else
-                if a >= 80 then hodnota2 10 : hodnota2 10 : hodnota2 100 : narimske (a - 80) else
-            if a >= 50 then hodnota2 50 : narimske (a - 50) else
-                if a >= 45 then hodnota2 5 : hodnota2 50 :  narimske (a - 45) else
-                if a >= 40 then hodnota2 10 : hodnota2 50 : narimske (a - 40) else
-            if a >= 10 then hodnota2 10 : narimske (a - 10) else
-                if a >= 9 then hodnota2 1 : hodnota2 10 :  narimske (a - 9) else
-            if a >= 5 then hodnota2 5 : narimske (a - 5) else
-                if a >= 4 then hodnota2 1 : hodnota2 5 :  narimske (a - 4) else
-            hodnota2 1 : narimske (a - 1)
+nařímské :: Int -> String
+nařímské 0 = []
+nařímské a = if a >= 1000 then hodnota2 1000 : nařímské (a - 1000) else
+                if a >= 900 then hodnota2 100 : hodnota2 1000 : nařímské (a - 900) else
+                if a >= 800 then hodnota2 100 : hodnota2 100 : hodnota2 1000 : nařímské (a - 800) else    
+            if a >= 500 then hodnota2 500 : nařímské (a - 500) else
+                if a >= 450 then hodnota2 50 : hodnota2 500 : nařímské (a - 450) else
+                if a >= 400 then hodnota2 100 : hodnota2 500 : nařímské (a - 400) else
+            if a >= 100 then hodnota2 100 : nařímské (a - 100) else
+                if a >= 90 then hodnota2 10 : hodnota2 100 :  nařímské (a - 90) else
+                if a >= 80 then hodnota2 10 : hodnota2 10 : hodnota2 100 : nařímské (a - 80) else
+            if a >= 50 then hodnota2 50 : nařímské (a - 50) else
+                if a >= 45 then hodnota2 5 : hodnota2 50 :  nařímské (a - 45) else
+                if a >= 40 then hodnota2 10 : hodnota2 50 : nařímské (a - 40) else
+            if a >= 10 then hodnota2 10 : nařímské (a - 10) else
+                if a >= 9 then hodnota2 1 : hodnota2 10 :  nařímské (a - 9) else
+            if a >= 5 then hodnota2 5 : nařímské (a - 5) else
+                if a >= 4 then hodnota2 1 : hodnota2 5 :  nařímské (a - 4) else
+            hodnota2 1 : nařímské (a - 1)
